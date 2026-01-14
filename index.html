@@ -1,37 +1,67 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <title>Demo Web AR Đơn Giản</title>
+    <title>Demo Web AR Ổn Định</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
-        body { margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif; }
-        model-viewer { width: 100%; height: 80vh; background-color: #f0f0f0; }
-        .controls { padding: 20px; }
+        body { margin: 0; background-color: #f8f9fa; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        .header { text-align: center; padding: 15px; }
+        /* Tối ưu hiển thị khung nhìn */
+        model-viewer { 
+            width: 100%; 
+            height: 75vh; 
+            --poster-color: transparent;
+        }
+        .controls { padding: 20px; text-align: center; color: #666; font-size: 0.9em; }
+        /* Nút AR tùy chỉnh cho đẹp hơn */
+        #ar-button {
+            background-color: #007bff;
+            color: white;
+            border-radius: 30px;
+            border: none;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
     </style>
 </head>
 <body>
 
-    <h2>Trải nghiệm Web AR</h2>
+    <div class="header">
+        <h2>Trải nghiệm Web AR</h2>
+    </div>
 
     <model-viewer 
         src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" 
         ar 
         ar-modes="webxr scene-viewer quick-look" 
+        ar-placement="floor"
         camera-controls 
-        poster="poster.webp" 
-        shadow-intensity="1" 
+        touch-action="pan-y"
+        shadow-intensity="1.5"
+        shadow-softness="1"
+        environment-image="neutral"
+        exposure="1"
         auto-rotate>
         
-        <button slot="ar-button" style="background-color: white; border-radius: 4px; border: none; position: absolute; top: 16px; right: 16px; padding: 10px;">
-            👋 Xem trong không gian thực
+        <button slot="ar-button" id="ar-button">
+            ✨ XEM TRONG PHÒNG CỦA BẠN
         </button>
+
+        <div slot="progress-bar" style="display: none;"></div>
     </model-viewer>
 
     <div class="controls">
-        <p>1. Mở link này bằng điện thoại (iOS/Android).</p>
-        <p>2. Bấm nút "Xem trong không gian thực".</p>
+        <p><b>Mẹo để ổn định:</b> Quét điện thoại xuống sàn nhà <br> theo hình vòng tròn cho đến khi vật thể hiện ra.</p>
     </div>
 
 </body>
