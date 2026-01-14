@@ -1,65 +1,92 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <title>Demo Web AR Ổn Định</title>
+    <title>Web AR - Điều khiển xoay</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
-        body { margin: 0; background-color: #f8f9fa; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        .header { text-align: center; padding: 15px; }
-        /* Tối ưu hiển thị khung nhìn */
-        model-viewer { 
-            width: 100%; 
-            height: 75vh; 
-            --poster-color: transparent;
+        body { margin: 0; font-family: sans-serif; background-color: #eee; }
+        model-viewer { width: 100%; height: 70vh; background: radial-gradient(#ffffff, #bbbbbb); }
+        
+        /* Cấu trúc các nút điều khiển */
+        .controls-panel {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+            background: white;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
         }
-        .controls { padding: 20px; text-align: center; color: #666; font-size: 0.9em; }
-        /* Nút AR tùy chỉnh cho đẹp hơn */
+
+        button.nav-btn {
+            padding: 12px 18px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            background-color: #333;
+            color: white;
+            transition: 0.3s;
+        }
+
+        button.nav-btn:active { transform: scale(0.9); background-color: #007bff; }
+
         #ar-button {
-            background-color: #007bff;
+            background-color: #28a745;
             color: white;
             border-radius: 30px;
             border: none;
             position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 12px 24px;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
             font-weight: bold;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h2>Trải nghiệm Web AR</h2>
-    </div>
-
     <model-viewer 
-    src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" 
-    ar 
-    ar-modes="webxr scene-viewer quick-look" 
-    ar-placement="floor"
-    ar-scale="fixed"  camera-controls 
-    shadow-intensity="2" 
-    shadow-softness="0.5"
-    environment-image="neutral"
-    style="width: 100%; height: 80vh;">
-    
-    <button slot="ar-button" id="ar-button">
-        ✨ XEM TRONG PHÒNG
-    </button>
-</model-viewer>
+        id="orbit-demo"
+        src="https://modelviewer.dev/shared-assets/models/Astronaut.glb" 
+        ar 
+        ar-modes="webxr scene-viewer quick-look" 
+        ar-placement="floor"
+        ar-scale="fixed"
+        camera-controls 
+        shadow-intensity="2" 
+        environment-image="neutral"
+        interpolation-decay="200"
+        camera-orbit="0deg 75deg auto">
+        
+        <button slot="ar-button" id="ar-button">🚀 XEM AR</button>
+    </model-viewer>
 
-    <div class="controls">
-        <p><b>Mẹo để ổn định:</b> Quét điện thoại xuống sàn nhà <br> theo hình vòng tròn cho đến khi vật thể hiện ra.</p>
+    <div class="controls-panel">
+        <button class="nav-btn" onclick="rotateModel(-45)">Xoay Trái ⟲</button>
+        <button class="nav-btn" onclick="resetModel()">Mặc định</button>
+        <button class="nav-btn" onclick="rotateModel(45)">Xoay Phải ⟳</button>
     </div>
+
+    <script>
+        const modelViewer = document.querySelector("#orbit-demo");
+        let currentRotation = 0;
+
+        // Hàm xoay vật thể
+        function rotateModel(degrees) {
+            currentRotation += degrees;
+            // camera-orbit nhận 3 tham số: [theta (ngang), phi (dọc), radius (khoảng cách)]
+            modelViewer.cameraOrbit = `${currentRotation}deg 75deg auto`;
+        }
+
+        // Hàm đưa về vị trí cũ
+        function resetModel() {
+            currentRotation = 0;
+            modelViewer.cameraOrbit = `0deg 75deg auto`;
+        }
+    </script>
 
 </body>
 </html>
-
